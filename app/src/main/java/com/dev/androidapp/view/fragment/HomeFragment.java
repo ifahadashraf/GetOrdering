@@ -24,11 +24,19 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.dev.androidapp.R;
+import com.dev.androidapp.RestaurantApp;
 import com.dev.androidapp.api.RestClient;
 import com.dev.androidapp.api.ServerConfig;
 import com.dev.androidapp.model.PlaceInfo;
@@ -54,8 +62,14 @@ import com.dev.androidapp.view.activities.MapsActivity;
 import com.dev.androidapp.view.activities.PlaceDetectorActivity;
 import com.dev.androidapp.view.adapters.RestaurantsAdapter;
 import com.github.chrisbanes.photoview.PhotoView;
+import com.google.gson.Gson;
 import com.orm.SugarRecord;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -75,6 +89,7 @@ import retrofit2.Response;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static com.dev.androidapp.RestaurantApp.realm;
+import static com.dev.androidapp.api.ServerConfig.BASE_URL;
 
 /**
  * Created by Experiments on 29-Mar-17.
@@ -301,7 +316,7 @@ public class HomeFragment extends BaseFragment implements RestaurantsAdapter.Res
             }
             llFilterByDistance.setVisibility(VISIBLE);
         }
-        callSearchApi(searchRequest);
+        callSearchApi2(searchRequest);
     }
 
     private void setVisibilityOfNoResults() {
@@ -421,6 +436,7 @@ public class HomeFragment extends BaseFragment implements RestaurantsAdapter.Res
     private void callSearchApi(SearchRequest searchRequest) {
         final BaseActivity activity = (BaseActivity) getActivity();
         activity.showProgress(getString(R.string.loading));
+        String json = new Gson().toJson(searchRequest);
         Call<GetRestaurantsResponse> searchRestaurants = RestClient.getInstance().getWebServices().searchRestaurants(searchRequest);
         searchRestaurants.enqueue(new Callback<GetRestaurantsResponse>() {
             @Override
@@ -461,6 +477,90 @@ public class HomeFragment extends BaseFragment implements RestaurantsAdapter.Res
                 activity.showMessage(getString(R.string.unknow_error));
             }
         });
+    }
+
+    private void callSearchApi2(SearchRequest searchRequest){
+        final BaseActivity activity = (BaseActivity) getActivity();
+        activity.showProgress(getString(R.string.loading));
+        final String body = new Gson().toJson(searchRequest);
+        String url = BASE_URL + "searchRestaurants";
+        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject resp = new JSONObject(response);
+                    GetRestaurantsResponse restaurantsResponse = new GetRestaurantsResponse();
+                    restaurantsResponse.setSuccess(resp.getLong("success"));
+                    if (restaurantsResponse.getSuccess() != ServerConfig.SUCCESS_RESPONSE) {
+                        activity.showMessage(getString(R.string.unknow_error));
+                        activity.dismissProgress();
+                        return;
+                    }
+
+                    JSONArray array = resp.getJSONArray("data");
+                    for(int i = 0; i < array.length(); i++){
+                        JSONObject objToSave = array.getJSONObject(i);
+                        RestaurantData obj = new Gson().fromJson(objToSave.toString(),RestaurantData.class);
+                        if(objToSave.getJSONObject("location").getString("lat").equalsIgnoreCase("")){
+                            obj.getLocation().setLat(0);
+                        }
+                        else{
+                            obj.getLocation().setLat(objToSave.getJSONObject("location").getDouble("lat"));
+                        }
+
+                        if(objToSave.getJSONObject("location").getString("lng").equalsIgnoreCase("")){
+                            obj.getLocation().setLng(0);
+                        }
+                        else{
+                            obj.getLocation().setLng(objToSave.getJSONObject("location").getDouble("lng"));
+                        }
+                        restaurantsResponse.getData().add(obj);
+
+                    }
+
+
+                    List<RestaurantData> apiData = restaurantsResponse.getData();
+                    List<RestaurantData> adapterModels = adapter.getModels();
+                    sortItems(apiData);
+                    setFavourites(apiData);
+                    adapterModels.clear();
+                    adapterModels.addAll(apiData);
+                    adapter.notifyDataSetChanged();
+                    activity.dismissProgress();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                activity.dismissProgress();
+                Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                try {
+                    return body == null ? null : body.toString().getBytes("utf-8");
+                } catch (UnsupportedEncodingException uee) {
+                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", body.toString(), "utf-8");
+                    return null;
+                }
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                100000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        RestaurantApp.getAppInstance().addToRequestQueue(request);
     }
 
     private void setFavourites(List<RestaurantData> data){
@@ -886,7 +986,7 @@ public class HomeFragment extends BaseFragment implements RestaurantsAdapter.Res
         distance.setLessThan(arrDistance[1]);
         mSearchRequest.setDistance(distance);
 
-        callSearchApi(mSearchRequest);
+        callSearchApi2(mSearchRequest);
     }
 
     private void showMinTowSearchRequiredDialog() {

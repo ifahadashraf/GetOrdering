@@ -13,10 +13,10 @@ public class Location implements Parcelable {
     @SerializedName("address")
     @Expose
     private String address;
-    @SerializedName("lat")
+    @SerializedName("lat1")
     @Expose
     private double lat;
-    @SerializedName("lng")
+    @SerializedName("lng1")
     @Expose
     private double lng;
     private String restaurantId;

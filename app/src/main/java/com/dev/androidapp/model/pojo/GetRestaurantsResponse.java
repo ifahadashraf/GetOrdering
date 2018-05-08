@@ -3,6 +3,7 @@ package com.dev.androidapp.model.pojo;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GetRestaurantsResponse {
@@ -16,6 +17,10 @@ public class GetRestaurantsResponse {
     @SerializedName("errorMessage")
     @Expose
     private String errorMessage;
+
+    public GetRestaurantsResponse(){
+        this.data = new ArrayList<>();
+    }
 
     public long getSuccess() {
         return success;

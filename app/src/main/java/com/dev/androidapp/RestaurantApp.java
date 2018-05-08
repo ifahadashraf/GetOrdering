@@ -3,12 +3,16 @@ package com.dev.androidapp;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.dev.androidapp.helper.ErrorReporter;
 import com.facebook.stetho.Stetho;
 import com.orm.SchemaGenerator;
 import com.orm.SugarApp;
 import com.orm.SugarContext;
 import com.orm.SugarDb;
+import com.thefinestartist.utils.content.Res;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -21,8 +25,13 @@ public class RestaurantApp extends SugarApp {
 
     private static RestaurantApp instance;
     public static Realm realm;
+    private RequestQueue mRequestQueue;
 
     public static Context getInstance() {
+        return instance;
+    }
+
+    public static RestaurantApp getAppInstance() {
         return instance;
     }
 
@@ -30,6 +39,7 @@ public class RestaurantApp extends SugarApp {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        mRequestQueue = Volley.newRequestQueue(getApplicationContext());
         RealmConfiguration config = new RealmConfiguration
                 .Builder(getBaseContext())
                 .deleteRealmIfMigrationNeeded()
@@ -70,6 +80,18 @@ public class RestaurantApp extends SugarApp {
                 }
                 break;
         }
+    }
+
+    public RequestQueue getRequestQueue() {
+        if (mRequestQueue == null) {
+            mRequestQueue = Volley.newRequestQueue(getApplicationContext());
+        }
+
+        return mRequestQueue;
+    }
+
+    public <T> void addToRequestQueue(Request<T> req) {
+        getRequestQueue().add(req);
     }
 
 }
