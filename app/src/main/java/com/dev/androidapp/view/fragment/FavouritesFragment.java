@@ -243,6 +243,16 @@ public class FavouritesFragment extends BaseFragment implements RestaurantsAdapt
     }
 
     @Override
+    public void onAdClick(String tagLine) {
+        new MaterialDialog.Builder(getContext())
+                .title("Tag Line")
+                .items((tagLine.equalsIgnoreCase("") ? "No tag line available" : tagLine))
+                .autoDismiss(true)
+                .negativeText("Close")
+                .show();
+    }
+
+    @Override
     public void onNameClick(final RestaurantData model) {
         new MaterialDialog.Builder(getContext())
                 .title("Restaurant Name")

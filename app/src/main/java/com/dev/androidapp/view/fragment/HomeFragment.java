@@ -483,8 +483,11 @@ public class HomeFragment extends BaseFragment implements RestaurantsAdapter.Res
         final BaseActivity activity = (BaseActivity) getActivity();
         activity.showProgress(getString(R.string.loading));
         final String body = new Gson().toJson(searchRequest);
-        String url = BASE_URL + "searchRestaurants";
-        StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+        String url = BASE_URL + "getRestaurants";
+        StringRequest request = new StringRequest(
+                Request.Method.POST,
+                url,
+                new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -501,23 +504,12 @@ public class HomeFragment extends BaseFragment implements RestaurantsAdapter.Res
                     for(int i = 0; i < array.length(); i++){
                         JSONObject objToSave = array.getJSONObject(i);
                         RestaurantData obj = new Gson().fromJson(objToSave.toString(),RestaurantData.class);
-                        if(objToSave.getJSONObject("location").getString("lat").equalsIgnoreCase("")){
-                            obj.getLocation().setLat(0);
-                        }
-                        else{
-                            obj.getLocation().setLat(objToSave.getJSONObject("location").getDouble("lat"));
-                        }
-
-                        if(objToSave.getJSONObject("location").getString("lng").equalsIgnoreCase("")){
-                            obj.getLocation().setLng(0);
-                        }
-                        else{
-                            obj.getLocation().setLng(objToSave.getJSONObject("location").getDouble("lng"));
-                        }
+                        obj.getLocation()
+                                .setLat(objToSave.getJSONObject("location").getDouble("lat"));
+                        obj.getLocation()
+                                .setLng(objToSave.getJSONObject("location").getDouble("lng"));
                         restaurantsResponse.getData().add(obj);
-
                     }
-
 
                     List<RestaurantData> apiData = restaurantsResponse.getData();
                     List<RestaurantData> adapterModels = adapter.getModels();
@@ -732,6 +724,16 @@ public class HomeFragment extends BaseFragment implements RestaurantsAdapter.Res
                 t.printStackTrace();
             }
         });
+    }
+
+    @Override
+    public void onAdClick(String tagLine) {
+        new MaterialDialog.Builder(getContext())
+                .title("Tag Line")
+                .items((tagLine.equalsIgnoreCase("") ? "No tag line available" : tagLine))
+                .autoDismiss(true)
+                .negativeText("Close")
+                .show();
     }
 
     @Override
@@ -979,8 +981,6 @@ public class HomeFragment extends BaseFragment implements RestaurantsAdapter.Res
             android.location.Location location = currentPlace.getLocation();
             distance.setLatitude(location.getLatitude());
             distance.setLongitude(location.getLongitude());
-//            distance.setLatitude(-26.416711);
-//            distance.setLongitude(28.465283);
         }
         distance.setMoreThan(arrDistance[0]);
         distance.setLessThan(arrDistance[1]);

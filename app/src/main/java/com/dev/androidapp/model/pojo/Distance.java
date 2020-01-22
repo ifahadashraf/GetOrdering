@@ -54,7 +54,7 @@ public class Distance extends SugarRecord implements Parcelable {
     }
 
     public void setMoreThan(long moreThan) {
-        this.moreThan = moreThan;
+        this.more_than_fake = moreThan;
     }
 
     public long getLessThan() {

@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Space;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.dev.androidapp.R;
@@ -20,6 +21,7 @@ import com.dev.androidapp.model.pojo.RestaurantData;
 import com.dev.androidapp.model.pojo.WorkInfo;
 import com.google.gson.Gson;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import butterknife.BindView;
@@ -63,9 +65,9 @@ public class RestaurantsAdapter extends BaseRecyclerAdapter<RestaurantData, Rest
                 .fitCenter()
                 .into(holder.ivImage);
 
-        //holder.tvLocation.setText(model.getLocation().getAddress());
         //holder.tvWebsite.setText(model.getContactInfo().getWebsite());
-        holder.tvViews.setText(String.valueOf(model.getViews()) + (model.getViews()==1?" view":" views"));
+        holder.tvViews
+                .setText(String.valueOf(model.getViews()) + (model.getViews()==1 ? " view" : " views"));
 
         if (position == getModels().size() - 1) {
             holder.spaceBottom.setVisibility(View.VISIBLE);
@@ -75,13 +77,12 @@ public class RestaurantsAdapter extends BaseRecyclerAdapter<RestaurantData, Rest
         if (currentPlace == null || currentPlace.getLocation() == null) {
             holder.tvDistance.setVisibility(View.INVISIBLE);
         } else {
-            holder.tvDistance.setVisibility(View.VISIBLE);
             android.location.Location dst = new android.location.Location("");
             dst.setLatitude(model.getLocation().getLat());
             dst.setLongitude(model.getLocation().getLng());
             float distanceTo = currentPlace.getLocation().distanceTo(dst) / 1000;
             model.setDistance(distanceTo);
-            holder.tvDistance.setText(model.getFormattedDistance() + " km");
+            holder.tvDisInKm.setText(model.getFormattedDistance().concat(" KM"));
         }
 
         if (model.getWorkInfo().isIsOpen()) {
@@ -163,6 +164,12 @@ public class RestaurantsAdapter extends BaseRecyclerAdapter<RestaurantData, Rest
                 restaurantsListener.onMenuClick(model);
             }
         });
+        holder.ivAd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                restaurantsListener.onAdClick(model.getTagLine());
+            }
+        });
         holder.favIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -234,6 +241,10 @@ public class RestaurantsAdapter extends BaseRecyclerAdapter<RestaurantData, Rest
         ImageView favIcon;
         @BindView(R.id.ivMenu)
         ImageView ivMenu;
+        @BindView(R.id.ivAd)
+        ImageView ivAd;
+        @BindView(R.id.tvDisInKm)
+        TextView tvDisInKm;
 
         Boolean flag;
 
@@ -241,7 +252,6 @@ public class RestaurantsAdapter extends BaseRecyclerAdapter<RestaurantData, Rest
             super(itemView);
             ButterKnife.bind(this, itemView);
             flag = false;
-
         }
     }
 
@@ -266,6 +276,8 @@ public class RestaurantsAdapter extends BaseRecyclerAdapter<RestaurantData, Rest
             void onNameClick(RestaurantData restaurantData);
 
             void onMenuClick(RestaurantData data);
+
+            void onAdClick(String tagLine);
 
         }
 }

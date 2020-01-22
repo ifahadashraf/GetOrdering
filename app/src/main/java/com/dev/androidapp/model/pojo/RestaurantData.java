@@ -49,6 +49,10 @@ public class RestaurantData {
     @Expose
     private Location location;
 
+    @SerializedName("tag_line")
+    @Expose
+    private String tagLine;
+
     @SerializedName("categories")
     @Expose
     private List<String> categories = null;
@@ -171,6 +175,14 @@ public class RestaurantData {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public String getTagLine() {
+        return tagLine;
+    }
+
+    public void setTagLine(String tagLine) {
+        this.tagLine = tagLine;
     }
 
     public List<String> getCategories() {
