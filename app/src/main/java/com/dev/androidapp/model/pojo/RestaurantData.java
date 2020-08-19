@@ -25,9 +25,9 @@ public class RestaurantData {
     @Expose
     private String tradingName;
 
-    @SerializedName("food_type")
-    @Expose
-    private String foodType;
+//    @SerializedName("food_type")
+//    @Expose
+//    private String foodType;
 
     @SerializedName("image_url")
     @Expose
@@ -53,6 +53,34 @@ public class RestaurantData {
     @Expose
     private String tagLine;
 
+    @SerializedName("reservtion")
+    @Expose
+    private Boolean reservtion;
+
+    @SerializedName("delivery")
+    @Expose
+    private Boolean delivery;
+
+    @SerializedName("delivery_with_map")
+    @Expose
+    private Boolean deliveryWithMap;
+
+    @SerializedName("seated")
+    @Expose
+    private Boolean seated;
+
+    @SerializedName("takeaway")
+    @Expose
+    private Boolean takeAway;
+
+    @SerializedName("menu")
+    @Expose
+    private Boolean menu;
+
+    @SerializedName("online")
+    @Expose
+    private Boolean online;
+
     @SerializedName("categories")
     @Expose
     private List<String> categories = null;
@@ -73,6 +101,8 @@ public class RestaurantData {
     private Pagination pagination;
     private float distance;
     private boolean isFavourite;
+    private List<String> services;
+    private List<String> servicesNames;
 
     public RestaurantData() {
         numberFormat = NumberFormat.getNumberInstance();
@@ -129,13 +159,13 @@ public class RestaurantData {
         this.tradingName = tradingName;
     }
 
-    public String getFoodType() {
-        return foodType;
-    }
-
-    public void setFoodType(String foodType) {
-        this.foodType = foodType;
-    }
+//    public String getFoodType() {
+//        return foodType;
+//    }
+//
+//    public void setFoodType(String foodType) {
+//        this.foodType = foodType;
+//    }
 
     public String getImageUrl() {
         return imageUrl;
@@ -211,5 +241,77 @@ public class RestaurantData {
 
     public int getViews() {
         return views;
+    }
+
+    public Boolean getReservtion() {
+        return reservtion;
+    }
+
+    public void setReservtion(Boolean reservtion) {
+        this.reservtion = reservtion;
+    }
+
+    public Boolean getDelivery() {
+        return delivery;
+    }
+
+    public void setDelivery(Boolean delivery) {
+        this.delivery = delivery;
+    }
+
+    public Boolean getDeliveryWithMap() {
+        return deliveryWithMap;
+    }
+
+    public void setDeliveryWithMap(Boolean deliveryWithMap) {
+        this.deliveryWithMap = deliveryWithMap;
+    }
+
+    public Boolean getSeated() {
+        return seated;
+    }
+
+    public void setSeated(Boolean seated) {
+        this.seated = seated;
+    }
+
+    public Boolean getTakeAway() {
+        return takeAway;
+    }
+
+    public void setTakeAway(Boolean takeAway) {
+        this.takeAway = takeAway;
+    }
+
+    public Boolean getMenu() {
+        return menu;
+    }
+
+    public void setMenu(Boolean menu) {
+        this.menu = menu;
+    }
+
+    public Boolean getOnline() {
+        return online;
+    }
+
+    public void setOnline(Boolean online) {
+        this.online = online;
+    }
+
+    public List<String> getServices() {
+        return services;
+    }
+
+    public void setServices(List<String> services) {
+        this.services = services;
+    }
+
+    public List<String> getServicesNames() {
+        return servicesNames;
+    }
+
+    public void setServicesNames(List<String> servicesNames) {
+        this.servicesNames = servicesNames;
     }
 }

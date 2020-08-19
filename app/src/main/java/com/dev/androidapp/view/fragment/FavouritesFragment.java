@@ -1,16 +1,20 @@
 package com.dev.androidapp.view.fragment;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -18,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.dev.androidapp.R;
 import com.dev.androidapp.api.RestClient;
 import com.dev.androidapp.model.GsonDeserializeExclusion;
+import com.dev.androidapp.model.PlaceInfo;
 import com.dev.androidapp.model.pojo.Favourite;
 import com.dev.androidapp.model.pojo.Location;
 import com.dev.androidapp.model.pojo.RestaurantData;
@@ -26,10 +31,16 @@ import com.dev.androidapp.model.pojo.ViewCountResponse;
 import com.dev.androidapp.model.pojo.WorkInfo;
 import com.dev.androidapp.view.activities.MainActivity;
 import com.dev.androidapp.view.activities.MapsActivity;
+import com.dev.androidapp.view.activities.PlaceDetectorActivity;
+import com.dev.androidapp.view.adapters.CheckBoxAdapter;
 import com.dev.androidapp.view.adapters.RestaurantsAdapter;
 import com.github.chrisbanes.photoview.PhotoView;
+import com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,6 +53,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.view.View.GONE;
 import static com.dev.androidapp.RestaurantApp.realm;
 
 
@@ -77,6 +89,7 @@ public class FavouritesFragment extends BaseFragment implements RestaurantsAdapt
         favRestaurants = (RecyclerView) view.findViewById(R.id.fav_restaurants);
         favRestaurants.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         adapter = new RestaurantsAdapter(getContext(), restaurantDataList, this);
+        adapter.setCurrentPlace(((PlaceDetectorActivity) getActivity()).currentPlace);
         favRestaurants.setAdapter(adapter);
     }
 
@@ -86,8 +99,12 @@ public class FavouritesFragment extends BaseFragment implements RestaurantsAdapt
                 .addDeserializationExclusionStrategy(new GsonDeserializeExclusion())
                 .create();
         for(Favourite fav : restaurants){
-            RestaurantData data = gson.fromJson(fav.getFavObject(),RestaurantData.class);
-            restaurantDataList.add(data);
+            try {
+                RestaurantData data = gson.fromJson(fav.getFavObject(),RestaurantData.class);
+                restaurantDataList.add(data);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -108,7 +125,7 @@ public class FavouritesFragment extends BaseFragment implements RestaurantsAdapt
 
     @Override
     public void onWebsiteClick(String url) {
-        ((MainActivity) getActivity()).openWebView(url);
+        ((MainActivity) getActivity()).openWebView(url.trim().toLowerCase());
     }
 
     @Override
@@ -151,10 +168,14 @@ public class FavouritesFragment extends BaseFragment implements RestaurantsAdapt
         List<String> items = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE", Locale.ENGLISH);
-        for (int i = 0; i < 7; i++) {
-            items.add(simpleDateFormat.format(new Date(calendar.getTimeInMillis())) + " : " + workInfo.getWorkingHours());
-            calendar.add(Calendar.DAY_OF_WEEK, 1);
+
+        try {
+            JSONObject jo = new JSONObject(new Gson().toJson(workInfo.getWorkingHours()));
+            for(int i = 0; i < jo.names().length(); i++){
+                items.add(jo.names().getString(i) + ": " + jo.get(jo.names().getString(i)));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
         new MaterialDialog.Builder(getContext())
@@ -250,6 +271,45 @@ public class FavouritesFragment extends BaseFragment implements RestaurantsAdapt
                 .autoDismiss(true)
                 .negativeText("Close")
                 .show();
+    }
+
+    @Override
+    public void onInfoClick(List<String> foodTypes, List<String> options, List<String> option1s) {
+        LayoutInflater inflater = this.getLayoutInflater();
+
+        // Dialog layout
+        View v = inflater.inflate(R.layout.grid_view, null);
+
+        // Get gridView from dialog_choice
+        GridView gV = v.findViewById(R.id.gridView);
+        GridView gV2 = v.findViewById(R.id.gridViewOptions);
+
+        // GridAdapter (Pass context and files list)
+        CheckBoxAdapter adapter = new CheckBoxAdapter(getActivity(), foodTypes);
+        CheckBoxAdapter adapter2 = new CheckBoxAdapter(getActivity(), options);
+
+        // Set adapter
+        gV.setAdapter(adapter);
+        gV2.setAdapter(adapter2);
+
+        if(foodTypes.size() == 0) {
+            gV.setVisibility(GONE);
+        }
+        if(options.size() == 0) {
+            gV2.setVisibility(GONE);
+        }
+
+        final AlertDialog.Builder builder2 = new AlertDialog.Builder(getActivity());
+        builder2.setTitle("Info");
+        builder2.setView(v);
+        builder2.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder2.setCancelable(true);
+        builder2.create().show();
     }
 
     @Override

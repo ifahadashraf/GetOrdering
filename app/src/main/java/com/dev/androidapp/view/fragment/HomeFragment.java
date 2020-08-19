@@ -1,5 +1,6 @@
 package com.dev.androidapp.view.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatRadioButton;
@@ -21,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -60,8 +63,10 @@ import com.dev.androidapp.view.activities.BaseActivity;
 import com.dev.androidapp.view.activities.MainActivity;
 import com.dev.androidapp.view.activities.MapsActivity;
 import com.dev.androidapp.view.activities.PlaceDetectorActivity;
+import com.dev.androidapp.view.adapters.CheckBoxAdapter;
 import com.dev.androidapp.view.adapters.RestaurantsAdapter;
 import com.github.chrisbanes.photoview.PhotoView;
+import com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import com.orm.SugarRecord;
 
@@ -70,6 +75,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -119,6 +125,8 @@ public class HomeFragment extends BaseFragment implements RestaurantsAdapter.Res
     TextView tvFilterOption;
     @BindView(R.id.llFilterByOption)
     LinearLayout llFilterByOption;
+    @BindView(R.id.llFilterByService)
+    LinearLayout llFilterByService;
     @BindView(R.id.tvSearch)
     AppCompatTextView tvSearch;
     @BindView(R.id.tvSortBy)
@@ -179,6 +187,56 @@ public class HomeFragment extends BaseFragment implements RestaurantsAdapter.Res
     AppCompatTextView tvSaveSearchText;
     @BindView(R.id.llSearchBox)
     LinearLayout llSearchBox;
+
+    @BindView(R.id.cbBakeryCafe)
+    AppCompatCheckBox cbBakeryCafe;
+    @BindView(R.id.cbQuickBite)
+    AppCompatCheckBox cbQuickBite;
+    @BindView(R.id.cbBreakfast)
+    AppCompatCheckBox cbBreakfast;
+    @BindView(R.id.cbLunch)
+    AppCompatCheckBox cbLunch;
+    @BindView(R.id.cbDinner)
+    AppCompatCheckBox cbDinner;
+    @BindView(R.id.cbFastFood)
+    AppCompatCheckBox cbFastFood;
+    @BindView(R.id.cbDrinksNightlife)
+    AppCompatCheckBox cbDrinksNightlife;
+    @BindView(R.id.cbBeerGarden)
+    AppCompatCheckBox cbBeerGarden;
+    @BindView(R.id.cbBar)
+    AppCompatCheckBox cbBar;
+    @BindView(R.id.cbBistro)
+    AppCompatCheckBox cbBistro;
+    @BindView(R.id.cbBrasserie)
+    AppCompatCheckBox cbBrasserie;
+    @BindView(R.id.cvFoodTruck)
+    AppCompatCheckBox cvFoodTruck;
+    @BindView(R.id.cbRoadHouse)
+    AppCompatCheckBox cbRoadHouse;
+    @BindView(R.id.cbSocialClub)
+    AppCompatCheckBox cbSocialClub;
+    @BindView(R.id.cbDeli)
+    AppCompatCheckBox cbDeli;
+    @BindView(R.id.cbDessertParlor)
+    AppCompatCheckBox cbDessertParlor;
+    @BindView(R.id.cbFastCasual)
+    AppCompatCheckBox cbFastCasual;
+    @BindView(R.id.cbKiosk)
+    AppCompatCheckBox cbKiosk;
+
+    @BindView(R.id.serviceTakeAway)
+    CheckBox serviceTakeAway;
+    @BindView(R.id.serviceMenu)
+    CheckBox serviceMenu;
+    @BindView(R.id.serviceDelivery)
+    CheckBox serviceDelivery;
+    @BindView(R.id.serviceDeliveryWithMaps)
+    CheckBox serviceDeliveryWithMaps;
+    @BindView(R.id.serviceReservation)
+    CheckBox serviceReservation;
+    @BindView(R.id.serviceSeated)
+    CheckBox serviceSeated;
     private RestaurantsAdapter adapter;
 
     private static final int SORT_BY_DISTANCE = 0;
@@ -205,7 +263,7 @@ public class HomeFragment extends BaseFragment implements RestaurantsAdapter.Res
     @Override
     protected void init() {
         llFilters = new LinearLayout[]{
-                llFilterByName, llFilterByOption, llFilterByCategory, llFilterByAddress, llFilterByDistance
+                llFilterByName, llFilterByOption, llFilterByCategory, llFilterByAddress, llFilterByDistance, llFilterByService
         };
 
         arrDistance[0] = 0;
@@ -479,11 +537,146 @@ public class HomeFragment extends BaseFragment implements RestaurantsAdapter.Res
         });
     }
 
+    public List<String> getServices(RestaurantData data) {
+        List<String> toReturn = new ArrayList<>();
+
+        if(data.getDelivery()) {
+            toReturn.add("D");
+        }
+        if(data.getDeliveryWithMap()) {
+            toReturn.add("DM");
+        }
+        if(data.getSeated()) {
+            toReturn.add("S");
+        }
+        if(data.getTakeAway()) {
+            toReturn.add("TA");
+        }
+        if(data.getMenu()) {
+            toReturn.add("M");
+        }
+        if(data.getOnline()) {
+            toReturn.add("O");
+        }
+
+        return toReturn;
+    }
+
+    public List<String> getServicesNames(RestaurantData data) {
+        List<String> toReturn = new ArrayList<>();
+
+        if(data.getDelivery()) {
+            toReturn.add("Delivery");
+        }
+        if(data.getDeliveryWithMap()) {
+            toReturn.add("Delivery With Maps");
+        }
+        if(data.getSeated()) {
+            toReturn.add("Seated");
+        }
+        if(data.getTakeAway()) {
+            toReturn.add("Takeaway");
+        }
+        if(data.getMenu()) {
+            toReturn.add("Menu");
+        }
+        if(data.getOnline()) {
+            toReturn.add("Online");
+        }
+
+        return toReturn;
+    }
+
+    public boolean isOpen(String timing) {
+        try {
+            String[] times = timing.split(" - ");
+            Date time1 = null;
+            try {
+                time1 = new SimpleDateFormat("hh:mm a").parse(times[0]);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Calendar calendar1 = Calendar.getInstance();
+            calendar1.setTime(time1);
+
+            Date time2 = null;
+            try {
+                time2 = new SimpleDateFormat("hh:mm a").parse(times[1]);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Calendar calendar2 = Calendar.getInstance();
+            calendar2.setTime(time2);
+
+            Date time3 = null;
+            try {
+                time3 = new SimpleDateFormat("hh:mm a").parse(
+                        new SimpleDateFormat("hh:mm a").format(Calendar.getInstance().getTime())
+                );
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Calendar calendar3 = Calendar.getInstance();
+            calendar3.setTime(time3);
+
+            Date x = calendar3.getTime();
+
+            return x.after(calendar1.getTime()) && x.before(calendar2.getTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean checkIsOpen(WorkInfo workInfo) {
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+
+        switch (day) {
+            case Calendar.SUNDAY:
+                if(isOpen(workInfo.getWorkingHours().getSunday())) {
+                    return true;
+                }
+                break;
+            case Calendar.MONDAY:
+                if(isOpen(workInfo.getWorkingHours().getMonday())) {
+                    return true;
+                }
+                break;
+            case Calendar.TUESDAY:
+                if(isOpen(workInfo.getWorkingHours().getTuesday())) {
+                    return true;
+                }
+                break;
+            case Calendar.WEDNESDAY:
+                if(isOpen(workInfo.getWorkingHours().getWednesday())) {
+                    return true;
+                }
+                break;
+            case Calendar.THURSDAY:
+                if(isOpen(workInfo.getWorkingHours().getThursday())) {
+                    return true;
+                }
+                break;
+            case Calendar.FRIDAY:
+                if(isOpen(workInfo.getWorkingHours().getFriday())) {
+                    return true;
+                }
+                break;
+            case Calendar.SATURDAY:
+                if(isOpen(workInfo.getWorkingHours().getSaturday())) {
+                    return true;
+                }
+                break;
+        }
+        return false;
+    }
+
     private void callSearchApi2(SearchRequest searchRequest){
         final BaseActivity activity = (BaseActivity) getActivity();
         activity.showProgress(getString(R.string.loading));
         final String body = new Gson().toJson(searchRequest);
-        String url = BASE_URL + "getRestaurants";
+        String url = BASE_URL + "api.php?param=searchRestaurants";
         StringRequest request = new StringRequest(
                 Request.Method.POST,
                 url,
@@ -504,10 +697,18 @@ public class HomeFragment extends BaseFragment implements RestaurantsAdapter.Res
                     for(int i = 0; i < array.length(); i++){
                         JSONObject objToSave = array.getJSONObject(i);
                         RestaurantData obj = new Gson().fromJson(objToSave.toString(),RestaurantData.class);
-                        obj.getLocation()
-                                .setLat(objToSave.getJSONObject("location").getDouble("lat"));
-                        obj.getLocation()
-                                .setLng(objToSave.getJSONObject("location").getDouble("lng"));
+                        obj.setServices(getServices(obj));
+                        obj.setServicesNames(getServicesNames(obj));
+                        try {
+                            obj.getLocation()
+                                    .setLat(objToSave.getJSONObject("location").getDouble("lat"));
+                            obj.getLocation()
+                                    .setLng(objToSave.getJSONObject("location").getDouble("lng"));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        obj.getWorkInfo().setIsOpen(checkIsOpen(obj.getWorkInfo()));
                         restaurantsResponse.getData().add(obj);
                     }
 
@@ -522,6 +723,12 @@ public class HomeFragment extends BaseFragment implements RestaurantsAdapter.Res
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    activity.dismissProgress();
+                    Toast.makeText(getContext(), "Server error", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    activity.dismissProgress();
+                    Toast.makeText(getContext(), "Server error", Toast.LENGTH_SHORT).show();
                 }
             }
         }, new com.android.volley.Response.ErrorListener() {
@@ -589,7 +796,7 @@ public class HomeFragment extends BaseFragment implements RestaurantsAdapter.Res
 
     @Override
     public void onWebsiteClick(String url) {
-        ((MainActivity) getActivity()).openWebView(url);
+        ((MainActivity) getActivity()).openWebView(url.trim().toLowerCase());
     }
 
     @Override
@@ -610,7 +817,81 @@ public class HomeFragment extends BaseFragment implements RestaurantsAdapter.Res
     }
 
     @Override
+    public void onInfoClick(List<String> foodTypes, List<String> options, List<String> services) {
+        LayoutInflater inflater = this.getLayoutInflater();
+
+        // Dialog layout
+        View v = inflater.inflate(R.layout.grid_view, null);
+
+        // Get gridView from dialog_choice
+        GridView gV = v.findViewById(R.id.gridView);
+        GridView gV2 = v.findViewById(R.id.gridViewOptions);
+
+        // GridAdapter (Pass context and files list)
+        CheckBoxAdapter adapter = new CheckBoxAdapter(getActivity(), foodTypes);
+        CheckBoxAdapter adapter2 = new CheckBoxAdapter(getActivity(), options);
+
+        // Set adapter
+        gV.setAdapter(adapter);
+        gV2.setAdapter(adapter2);
+
+        if(foodTypes.size() == 0) {
+            gV.setVisibility(GONE);
+        }
+        if(options.size() == 0) {
+            gV2.setVisibility(GONE);
+        }
+
+        final AlertDialog.Builder builder2 = new AlertDialog.Builder(getActivity());
+        builder2.setTitle("Info");
+        builder2.setView(v);
+        builder2.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder2.setCancelable(true);
+        builder2.create().show();
+    }
+
+    @Override
     public void onAddressClick(final Location location) {
+//        LayoutInflater inflater = this.getLayoutInflater();
+//
+//        // Dialog layout
+//        View v = inflater.inflate(R.layout.grid_view, null);
+//
+//        // Get gridView from dialog_choice
+//        GridView gV = v.findViewById(R.id.gridView);
+//
+//        ArrayList<String> a = new ArrayList<String>();
+//        a.add("1");
+//        a.add("1");
+//        a.add("1");
+//
+//        // GridAdapter (Pass context and files list)
+//        CheckBoxAdapter adapter = new CheckBoxAdapter(getActivity(), a);
+//
+//        // Set adapter
+//        gV.setAdapter(adapter);
+//
+//        final AlertDialog.Builder builder2 = new AlertDialog.Builder(getActivity());
+//        builder2.setTitle("MY GALLERY");
+//        builder2.setView(v);
+//        builder2.setPositiveButton("NEXT", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//
+//            }
+//        }).setNegativeButton("BACK", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//
+//            }
+//        });
+//        builder2.setCancelable(false);
+//        builder2.create().show();
         new MaterialDialog.Builder(getContext())
                 .title("Restaurant Address")
                 .items(location.getAddress())
@@ -632,10 +913,14 @@ public class HomeFragment extends BaseFragment implements RestaurantsAdapter.Res
         List<String> items = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE", Locale.ENGLISH);
-        for (int i = 0; i < 7; i++) {
-            items.add(simpleDateFormat.format(new Date(calendar.getTimeInMillis())) + " : " + workInfo.getWorkingHours());
-            calendar.add(Calendar.DAY_OF_WEEK, 1);
+
+        try {
+            JSONObject jo = new JSONObject(new Gson().toJson(workInfo.getWorkingHours()));
+            for(int i = 0; i < jo.names().length(); i++){
+                items.add(jo.names().getString(i) + ": " + jo.get(jo.names().getString(i)));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
         new MaterialDialog.Builder(getContext())
@@ -666,7 +951,7 @@ public class HomeFragment extends BaseFragment implements RestaurantsAdapter.Res
     @Override
     public void onTypeClick(List<String> businessType) {
         new MaterialDialog.Builder(getContext())
-                .title("Options")
+                .title("Services")
                 .items(businessType)
                 .autoDismiss(true)
                 .positiveText("Close")
@@ -705,9 +990,7 @@ public class HomeFragment extends BaseFragment implements RestaurantsAdapter.Res
                 if (viewCountResponse.getSuccess() == 1) {
                     model.setViews(model.getViews() + 1);
                     adapter.notifyItemChanged(adapter.getModels().indexOf(model));
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(model.getMenuUrl()));
-                    startActivity(browserIntent);
-                    //activity.openWebView(model.getMenuUrl());
+                    activity.openWebView(model.getMenuUrl());
                 } else {
                     activity.showMessage(viewCountResponse.getErrorMessage());
                 }
@@ -746,7 +1029,7 @@ public class HomeFragment extends BaseFragment implements RestaurantsAdapter.Res
                 .show();
     }
 
-    @OnClick({R.id.tvSortBy, R.id.tvSaveSearchText, R.id.tvClearSearch, R.id.tvSearch, R.id.tvFilterName, R.id.tvFilterDistance, R.id.tvFilterAddress, R.id.tvFilterCategory, R.id.tvFilterOption})
+    @OnClick({R.id.tvSortBy, R.id.tvSaveSearchText, R.id.tvClearSearch, R.id.tvSearch, R.id.tvFilterName, R.id.tvFilterDistance, R.id.tvFilterAddress, R.id.tvFilterCategory, R.id.tvFilterOption, R.id.tvFilterService})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tvClearSearch:
@@ -799,9 +1082,9 @@ public class HomeFragment extends BaseFragment implements RestaurantsAdapter.Res
             case R.id.tvFilterOption:
                 llFilterByOption.setVisibility(llFilterByOption.getVisibility() == VISIBLE ? GONE : VISIBLE);
                 break;
-            // case R.id.tvFilterRating:
-            //llFilterByRating.setVisibility(llFilterByRating.getVisibility() == VISIBLE ? GONE : VISIBLE);
-            //     break;
+            case R.id.tvFilterService:
+                llFilterByService.setVisibility(llFilterByService.getVisibility() == VISIBLE ? GONE : VISIBLE);
+                break;
         }
     }
 
@@ -821,6 +1104,14 @@ public class HomeFragment extends BaseFragment implements RestaurantsAdapter.Res
     }
 
     private void clearTextsRecursive(ViewGroup viewGroup) {
+//        getActivity().getSupportFragmentManager().beginTransaction().detach(this).attach(this).commit();
+////        Fragment currentFragment = getActivity().getFragmentManager().findFragmentById(R.id.container_home);
+////        if (currentFragment instanceof "HomeFragmnet") {
+////            FragmentTransaction fragTransaction =   (getActivity()).getFragmentManager().beginTransaction();
+////            fragTransaction.detach(currentFragment);
+////            fragTransaction.attach(currentFragment);
+////            fragTransaction.commit();
+////        }
         int childCount = viewGroup.getChildCount();
         for (int i = 0; i < childCount; i++) {
             View view = viewGroup.getChildAt(i);
@@ -963,10 +1254,88 @@ public class HomeFragment extends BaseFragment implements RestaurantsAdapter.Res
             if (cbWifi.isChecked()) {
                 businessTypes.add(cbWifi.getText().toString());
             }
+            if (cbBakeryCafe.isChecked()) {
+                businessTypes.add(cbBakeryCafe.getText().toString());
+            }
+            if (cbQuickBite.isChecked()) {
+                businessTypes.add(cbQuickBite.getText().toString());
+            }
+            if (cbBreakfast.isChecked()) {
+                businessTypes.add(cbBreakfast.getText().toString());
+            }
+            if (cbLunch.isChecked()) {
+                businessTypes.add(cbLunch.getText().toString());
+            }
+            if (cbDinner.isChecked()) {
+                businessTypes.add(cbDinner.getText().toString());
+            }
+            if (cbFastFood.isChecked()) {
+                businessTypes.add(cbFastFood.getText().toString());
+            }
+            if (cbDrinksNightlife.isChecked()) {
+                businessTypes.add(cbDrinksNightlife.getText().toString());
+            }
+            if (cbBeerGarden.isChecked()) {
+                businessTypes.add(cbBeerGarden.getText().toString());
+            }
+            if (cbBar.isChecked()) {
+                businessTypes.add(cbBar.getText().toString());
+            }
+            if (cbBistro.isChecked()) {
+                businessTypes.add(cbBistro.getText().toString());
+            }
+            if (cbBrasserie.isChecked()) {
+                businessTypes.add(cbBrasserie.getText().toString());
+            }
+            if (cvFoodTruck.isChecked()) {
+                businessTypes.add(cvFoodTruck.getText().toString());
+            }
+            if (cbRoadHouse.isChecked()) {
+                businessTypes.add(cbRoadHouse.getText().toString());
+            }
+            if (cbSocialClub.isChecked()) {
+                businessTypes.add(cbSocialClub.getText().toString());
+            }
+            if (cbDeli.isChecked()) {
+                businessTypes.add(cbDeli.getText().toString());
+            }
+            if (cbDessertParlor.isChecked()) {
+                businessTypes.add(cbDessertParlor.getText().toString());
+            }
+            if (cbFastCasual.isChecked()) {
+                businessTypes.add(cbFastCasual.getText().toString());
+            }
+            if (cbKiosk.isChecked()) {
+                businessTypes.add(cbKiosk.getText().toString());
+            }
+
             mSearchRequest.setBusinessTypes(businessTypes);
 
             mSearchRequest.setOpen(cbOpen.isChecked());
             mSearchRequest.setTakeAway(cbTakeAway.isChecked());
+        }
+
+        if (llFilterByService.getVisibility() == VISIBLE) {
+            String service = "";
+            if (serviceTakeAway.isChecked()) {
+                service += "take_away,";
+            }
+            if (serviceDelivery.isChecked()) {
+                service += "delivery,";
+            }
+            if (serviceDeliveryWithMaps.isChecked()) {
+                service += "delivery_map,";
+            }
+            if (serviceReservation.isChecked()) {
+                service += "reservation,";
+            }
+            if (serviceMenu.isChecked()) {
+                service += "menu,";
+            }
+            if (serviceSeated.isChecked()) {
+                service += "seated,";
+            }
+            mSearchRequest.setService(service.substring(0, service.length() - 1));
         }
 
         mSearchRequest.setTimestamp(System.currentTimeMillis());

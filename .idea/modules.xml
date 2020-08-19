@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/AndroidStudioProjects-GetOrdering.iml" filepath="$PROJECT_DIR$/AndroidStudioProjects-GetOrdering.iml" />
       <module fileurl="file://$PROJECT_DIR$/GetOrdering.iml" filepath="$PROJECT_DIR$/GetOrdering.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/GetOrdering-app.iml" filepath="$PROJECT_DIR$/app/GetOrdering-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/GetOrdering-base.iml" filepath="$PROJECT_DIR$/base/GetOrdering-base.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/base/base.iml" filepath="$PROJECT_DIR$/base/base.iml" />
-      <module fileurl="file://D:\AndroidStudioProjects\GetOrdering\source_code_v10001_delivery.iml" filepath="D:\AndroidStudioProjects\GetOrdering\source_code_v10001_delivery.iml" />
     </modules>
   </component>
 </project>

@@ -4,12 +4,14 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.orm.dsl.Table;
 
+import java.util.List;
+
 @Table
 public class WorkInfo {
 
     @SerializedName("working_hours")
     @Expose
-    private String workingHours;
+    private WorkingHours workingHours;
     @SerializedName("isOpen")
     @Expose
     private boolean isOpen;
@@ -23,11 +25,11 @@ public class WorkInfo {
         this.restaurantId = restaurantId;
     }
 
-    public String getWorkingHours() {
+    public WorkingHours getWorkingHours() {
         return workingHours;
     }
 
-    public void setWorkingHours(String workingHours) {
+    public void setWorkingHours(WorkingHours workingHours) {
         this.workingHours = workingHours;
     }
 

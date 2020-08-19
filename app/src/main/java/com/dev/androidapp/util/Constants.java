@@ -15,11 +15,11 @@ public class Constants {
     }
 
     public interface Urls{
-        String TAKKI_WEBSITE = "http://www.mytakki.com";
-        String TERMS_URL = "http://www.nuroworks.com/takki/legal/termsandconditions.html";
+        String TAKKI_WEBSITE = "http://www.w8r-getordering.com";
+        String TERMS_URL = "http://w8r-getordering.com/terms.html";
         String PRIVACY_URL = "http://www.nuroworks.com/takki/legal/privacy.html";
-        String COPYRIGHT_URL = "http://www.nuroworks.com/takki/legal/copyright.html ";
-        String FAQ_URL = "http://www.nuroworks.com/takki/legal/faq.html";
+        String COPYRIGHT_URL = "http://www.w8r-getordering.com/copyright.html";
+        String FAQ_URL = "http://w8r-getordering.com/about.html";
     }
     public interface LocationConfig{
         int HIGH_ACCURACY = 0;

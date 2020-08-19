@@ -46,6 +46,9 @@ public class SearchRequest extends SugarRecord implements Parcelable {
     @SerializedName("take_away")
     @Expose
     private boolean takeAway;
+    @SerializedName("service")
+    @Expose
+    private String service;
     @Ignore
     private long timestamp;
     @Ignore
@@ -150,6 +153,14 @@ public class SearchRequest extends SugarRecord implements Parcelable {
 
     public String getSearchName() {
         return searchName;
+    }
+
+    public String getService() {
+        return service;
+    }
+
+    public void setService(String service) {
+        this.service = service;
     }
 
     public SearchRequest() {

@@ -27,7 +27,7 @@ public interface WebServices {
             @Body SearchRequest searchRequest
     );
 
-    @POST("increaseViewCount")
+    @POST("api.php?param=increaseViewCount")
     Call<ViewCountResponse> increaseViewCount(
             @Body ViewCountRequest viewCountRequest
     );

@@ -24,43 +24,6 @@
             android:orientation="vertical">
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/tvFilterName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/bg_dark_grey"
-                android:gravity="center"
-                android:padding="16dp"
-                android:text="Filter By Name"
-                android:textColor="@color/md_white_1000"
-                android:textSize="18sp" />
-
-            <LinearLayout
-                android:id="@+id/llFilterByName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Restaurant/Shop Name"
-                        android:padding="16dp"
-                        android:id="@+id/etName"
-                        android:autoText="true"
-                        android:inputType="textPersonName|textAutoComplete|textAutoCorrect"
-                        android:textColor="@color/md_grey_900"
-                        android:textColorHint="@color/accent"
-                        android:textSize="16sp" />
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
-
-            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/tvFilterDistance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -129,6 +92,146 @@
             </LinearLayout>
 
             <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tvFilterService"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/bg_dark_grey"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="Filter By Service"
+                android:textColor="@color/md_white_1000"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:id="@+id/llFilterByService"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/serviceTakeAway"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Take Away"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/serviceMenu"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Menu"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/serviceSeated"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Seated"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/serviceReservation"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Reservation"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/serviceDelivery"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Delivery"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/serviceDeliveryWithMaps"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Delivery With Maps"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tvFilterName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/bg_dark_grey"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="Filter By Name"
+                android:textColor="@color/md_white_1000"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:id="@+id/llFilterByName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Restaurant/Shop Name"
+                        android:padding="16dp"
+                        android:id="@+id/etName"
+                        android:autoText="true"
+                        android:inputType="textPersonName|textAutoComplete|textAutoCorrect"
+                        android:textColor="@color/md_grey_900"
+                        android:textColorHint="@color/accent"
+                        android:textSize="16sp" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/tvFilterAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -173,7 +276,7 @@
                 android:background="@drawable/bg_dark_grey"
                 android:gravity="center"
                 android:padding="16dp"
-                android:text="Filter By Category / Item"
+                android:text="Filter By Menu"
                 android:textColor="@color/md_white_1000"
                 android:textSize="18sp" />
 
@@ -233,7 +336,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Coffee shop"
+                        android:text="Coffee shops"
                         android:textColor="@color/accent"
                         android:textColorHint="@color/accent" />
 
@@ -432,6 +535,249 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Wi-fi"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/cbBakeryCafe"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Bakery + Cafés casual"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/cbQuickBite"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Quick bite"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/cbBreakfast"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Breakfast"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/cbLunch"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Lunch"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/cbDinner"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Dinner"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/cbFastFood"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Fast Food"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/cbDrinksNightlife"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Drinks + Nightlife"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/cbBeerGarden"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Beer Garden"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/cbBar"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Bar"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/cbBistro"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Bistro"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/cbBrasserie"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Brasserie"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/cvFoodTruck"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Food Truck"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/cbRoadHouse"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Road House"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/cbSocialClub"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Social Club"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/cbDeli"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Deli"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/cbDessertParlor"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Dessert Parlor"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/cbFastCasual"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Fast Casual"
+                        android:textColor="@color/accent"
+                        android:textColorHint="@color/accent" />
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/cbKiosk"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Kiosk"
                         android:textColor="@color/accent"
                         android:textColorHint="@color/accent" />
 

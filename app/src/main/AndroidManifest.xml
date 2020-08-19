@@ -21,6 +21,7 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
         <activity
             android:name="com.dev.androidapp.view.activities.SplashActivity"
             android:screenOrientation="portrait"

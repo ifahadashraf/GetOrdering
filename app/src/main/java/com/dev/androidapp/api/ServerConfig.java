@@ -12,6 +12,6 @@ public interface ServerConfig {
      */
     int TIMEOUT = 100;
 
-    String BASE_URL = "http://oriolestudios.co.za/takki/nuro/api/";
+    String BASE_URL = "http://panel.w8r-getordering.com/super/";
     long SUCCESS_RESPONSE = 1;
 }

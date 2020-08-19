@@ -22,6 +22,7 @@ import com.dev.androidapp.model.pojo.WorkInfo;
 import com.google.gson.Gson;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -65,7 +66,7 @@ public class RestaurantsAdapter extends BaseRecyclerAdapter<RestaurantData, Rest
                 .fitCenter()
                 .into(holder.ivImage);
 
-        //holder.tvWebsite.setText(model.getContactInfo().getWebsite());
+//        holder.tvWebsite.setText(model.getContactInfo().getWebsite());
         holder.tvViews
                 .setText(String.valueOf(model.getViews()) + (model.getViews()==1 ? " view" : " views"));
 
@@ -93,8 +94,8 @@ public class RestaurantsAdapter extends BaseRecyclerAdapter<RestaurantData, Rest
             holder.tvStatus.setTextColor(ContextCompat.getColor(getContext(), R.color.md_red_700));
         }
         //holder.tvPhone.setText(model.getContactInfo().getPhone());
-        holder.tvType.setText(TextUtils.join(" | ", model.getBusinessType()));
-        holder.tvCuisine.setText(model.getFoodType());
+        holder.tvType.setText(TextUtils.join(" | ", model.getServices()));
+//        holder.tvCuisine.setText(model.getFoodType());
         holder.tvName.setText(model.getTradingName());
         if(model.isFavourite()){
             holder.favIcon.setImageResource(R.drawable.ic_favorite_red_900_24dp);
@@ -106,15 +107,15 @@ public class RestaurantsAdapter extends BaseRecyclerAdapter<RestaurantData, Rest
         holder.tvType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                restaurantsListener.onTypeClick(model.getBusinessType());
+                restaurantsListener.onTypeClick(model.getServicesNames());
             }
         });
-        holder.tvCuisine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                restaurantsListener.onCuisineClick(model.getFoodType());
-            }
-        });
+//        holder.tvCuisine.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                restaurantsListener.onCuisineClick(model.getFoodType());
+//            }
+//        });
         holder.tvName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -184,6 +185,21 @@ public class RestaurantsAdapter extends BaseRecyclerAdapter<RestaurantData, Rest
                 }
             }
         });
+        holder.ivInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<String> services = new ArrayList<String>();
+                services.add("Menu");
+                services.add("Take Away");
+                services.add("Order In");
+                services.add("Full System - POS");
+                services.add("Reservation");
+                services.add("Delivery service");
+                services.add("Internet payment");
+
+                restaurantsListener.onInfoClick(model.getMeals(), model.getBusinessType(), services);
+            }
+        });
 
     }
 
@@ -245,6 +261,8 @@ public class RestaurantsAdapter extends BaseRecyclerAdapter<RestaurantData, Rest
         ImageView ivAd;
         @BindView(R.id.tvDisInKm)
         TextView tvDisInKm;
+        @BindView(R.id.ivInfo)
+        ImageView ivInfo;
 
         Boolean flag;
 
@@ -278,6 +296,8 @@ public class RestaurantsAdapter extends BaseRecyclerAdapter<RestaurantData, Rest
             void onMenuClick(RestaurantData data);
 
             void onAdClick(String tagLine);
+
+            void onInfoClick(List<String> foodTypes, List<String> options, List<String> services);
 
         }
 }

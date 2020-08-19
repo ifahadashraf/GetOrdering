@@ -166,6 +166,9 @@ public class MainActivity extends PlaceDetectorActivity implements NavigationVie
         openWebView(Constants.Urls.COPYRIGHT_URL);
     }
     public void openWebView(String url) {
+        if(!url.contains("http://") && !url.contains("https://")) {
+            url = "http://" + url;
+        }
         new FinestWebView.Builder(this)
                 .toolbarColor(ContextCompat.getColor(this, R.color.primary))
                 .statusBarColor(ContextCompat.getColor(this, R.color.primary_dark))
